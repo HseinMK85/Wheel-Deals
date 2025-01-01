@@ -1,115 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:http/http.dart' as http;  
+import 'dart:convert';  
 
 void main() {
-  runApp(CarSearchApp());
+  runApp(MyApp());
 }
 
-class CarSearchApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Car Search',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: CarSearchScreen(),
+      title: 'Car Finder App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: CarSearchPage(),
     );
   }
 }
 
-class CarSearchScreen extends StatefulWidget {
+class CarSearchPage extends StatefulWidget {
   @override
-  _CarSearchScreenState createState() => _CarSearchScreenState();
+  _CarSearchPageState createState() => _CarSearchPageState();
 }
 
-class _CarSearchScreenState extends State<CarSearchScreen> {
-  final TextEditingController _minPriceController = TextEditingController();
-  final TextEditingController _maxPriceController = TextEditingController();
-  List<dynamic> _cars = [];
-  bool _isLoading = false;
+class _CarSearchPageState extends State<CarSearchPage> {
+  List<dynamic> cars = [];
 
-  Future<void> searchCars() async {
-    final minPrice = _minPriceController.text;
-    final maxPrice = _maxPriceController.text;
-
-    if (minPrice.isEmpty || maxPrice.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter both minimum and maximum price')),
-      );
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
+  Future<void> fetchCars() async {
+    final url = Uri.parse('https://WheelDeals77.infinityfreeapp.com/search_cars.php');
 
     try {
-      final response = await http.get(
-        Uri.parse(
-          'https://your-infinityfree-url.com/search_cars.php?min_price=$minPrice&max_price=$maxPrice',
-        ),
-      );
-
+      final response = await http.get(url);
       if (response.statusCode == 200) {
         setState(() {
-          _cars = json.decode(response.body);
+          cars = json.decode(response.body);  
         });
       } else {
-        throw Exception('Failed to load cars');
+        print('Failed to load data');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching cars: $e')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      print('Error: $e');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCars();  
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Car Search'),
+        title: Text('Car Finder'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _minPriceController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Minimum Price'),
-            ),
-            TextField(
-              controller: _maxPriceController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Maximum Price'),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: searchCars,
-              child: Text('Search'),
-            ),
-            SizedBox(height: 16),
-            _isLoading
-                ? CircularProgressIndicator()
-                : Expanded(
-                    child: ListView.builder(
-                      itemCount: _cars.length,
-                      itemBuilder: (context, index) {
-                        final car = _cars[index];
-                        return ListTile(
-                          title: Text(car['name']),
-                          subtitle: Text('Price: \$${car['price']}'),
-                        );
-                      },
-                    ),
-                  ),
-          ],
-        ),
+      body: ListView.builder(
+        itemCount: cars.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(cars[index]['name']),
+            subtitle: Text('\$${cars[index]['price']}'),
+          );
+        },
       ),
     );
   }
