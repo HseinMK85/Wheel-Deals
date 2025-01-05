@@ -1,0 +1,26 @@
+# pubspec.lock
+# This file is auto-generated. Modify pubspec.yaml instead.
+sdks:
+  dart: ">=2.19.0 <4.0.0"
+  flutter: ">=3.0.0"
+
+packages:
+  flutter:
+    dependency: "sdk"
+    description: flutter
+    source: sdk
+    version: "3.0.0"
+  http:
+    dependency: "direct main"
+    description:
+      name: http
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.0"
+  json_annotation:
+    dependency: "direct main"
+    description:
+      name: json_annotation
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.8.0"

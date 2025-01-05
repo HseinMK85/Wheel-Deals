@@ -1,0 +1,11 @@
+<key>CFBundleDevelopmentRegion</key>
+<string>en</string>
+<key>CFBundleIdentifier</key>
+<string>com.example.your_project_name</string>
+<key>CFBundleName</key>
+<string>Your Project Name</string>
+<key>UIBackgroundModes</key>
+<array>
+    <string>fetch</string>
+    <string>remote-notification</string>
+</array>

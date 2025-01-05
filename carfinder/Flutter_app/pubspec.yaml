@@ -1,0 +1,12 @@
+name: your_project_name
+description: A new Flutter project
+
+publish_to: 'none' # Optional: If you're not publishing to pub.dev
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.15.0  # Add the http package to make HTTP requests
+  
+flutter:
+  uses-material-design: true
