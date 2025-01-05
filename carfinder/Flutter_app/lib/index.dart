@@ -29,7 +29,7 @@ class _CarSearchPageState extends State<CarSearchPage> {
   List<dynamic> cars = [];
 
   Future<void> fetchCars() async {
-    final url = Uri.parse('http://WheelDeals77.infinityfreeapp.com/search_cars.php');
+    final url = Uri.parse('http://WheelDeals77.infinityfreeapp.com/index.php');
 
     try {
       final response = await http.get(url);
